@@ -6,12 +6,10 @@ import { makeStyles } from '@material-ui/styles';
 import {
   Grid,
   Button,
-  IconButton,
   TextField,
   Link,
   Typography
 } from '@material-ui/core';
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
 import { Facebook as FacebookIcon, Google as GoogleIcon } from 'icons';
 
@@ -147,10 +145,6 @@ const SignIn = props => {
     }));
   }, [formState.values]);
 
-  const handleBack = () => {
-    history.goBack();
-  };
-
   const handleChange = event => {
     event.persist();
 
@@ -172,7 +166,7 @@ const SignIn = props => {
 
   const handleSignIn = event => {
     event.preventDefault();
-    history.push('/');
+    history.push('/home');
   };
 
   const hasError = field =>
