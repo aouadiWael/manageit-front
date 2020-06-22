@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import clsx from 'clsx';
 import moment from 'moment';
 import PerfectScrollbar from 'react-perfect-scrollbar';
@@ -52,10 +52,18 @@ const statusColors = {
 
 const LatestOrders = props => {
   const { className, ...rest } = props;
-
   const classes = useStyles();
+  const [orders, setOrders] = useState([]);
 
-  const [orders] = useState(mockData);
+  useEffect(() => {
+    async function fetchData() {
+      const res = await fetch(`http://localhost:8081/employes/`, {});
+      const data = await res.json();
+      setOrders(data);
+    }
+    fetchData();
+  }, []);
+
 
   return (
     <Card
@@ -72,7 +80,7 @@ const LatestOrders = props => {
             New entry
           </Button>
         }
-        title="Latest Orders"
+        title="Liste des consultants"
       />
       <Divider />
       <CardContent className={classes.content}>
@@ -81,8 +89,8 @@ const LatestOrders = props => {
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell>Order Ref</TableCell>
-                  <TableCell>Customer</TableCell>
+                  <TableCell>Nom</TableCell>
+                  <TableCell>Prénom</TableCell>
                   <TableCell sortDirection="desc">
                     <Tooltip
                       enterDelay={300}
@@ -92,11 +100,11 @@ const LatestOrders = props => {
                         active
                         direction="desc"
                       >
-                        Date
+                        Date de naissance
                       </TableSortLabel>
                     </Tooltip>
                   </TableCell>
-                  <TableCell>Status</TableCell>
+                  <TableCell>Téléphone</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -105,12 +113,13 @@ const LatestOrders = props => {
                     hover
                     key={order.id}
                   >
-                    <TableCell>{order.ref}</TableCell>
-                    <TableCell>{order.customer.name}</TableCell>
+                    <TableCell>{order.nom}</TableCell>
+                    <TableCell>{order.prenom}</TableCell>
                     <TableCell>
-                      {moment(order.createdAt).format('DD/MM/YYYY')}
+                      {moment(order.dateNaissance).format('DD/MM/YYYY')}
                     </TableCell>
-                    <TableCell>
+                    <TableCell>{order.tel}</TableCell>
+                    {/*<TableCell>
                       <div className={classes.statusContainer}>
                         <StatusBullet
                           className={classes.status}
@@ -119,7 +128,7 @@ const LatestOrders = props => {
                         />
                         {order.status}
                       </div>
-                    </TableCell>
+                    </TableCell>*/}
                   </TableRow>
                 ))}
               </TableBody>
