@@ -18,8 +18,8 @@ const useStyles = makeStyles(() => ({
 }));
 
 const AccountDetails = props => {
-  const { className, ...rest } = props;
 
+  const { className, ...rest } = props;
   const classes = useStyles();
   const [user, setUser] = useState(null);
 
@@ -32,11 +32,24 @@ const AccountDetails = props => {
     fetchUser();
   }, []);
 
+  const handleSubmit = () => {
+    const requestOptions = {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' , 'Accept': 'application/json' },
+      body: JSON.stringify(user)
+  };
+
+  let idToUpdate = JSON.parse(requestOptions.body).id;
+
+  fetch(`http://localhost:8081/employes/employe/${idToUpdate}`, requestOptions)
+      .then(response => response.json())
+  };
+
   const handleChange = event => {
-    /*setValues({
-      ...values,
+    setUser({
+      ...user,
       [event.target.name]: event.target.value
-    });*/
+    });
   };
 
   const states = [
@@ -77,7 +90,7 @@ const AccountDetails = props => {
                 helperText="Please specify the first name"
                 label="First name"
                 margin="dense"
-                name="firstName"
+                name="nom"
                 onChange={handleChange}
                 required
                 value={user ? user.nom : ''}
@@ -93,7 +106,7 @@ const AccountDetails = props => {
                 fullWidth
                 label="Last name"
                 margin="dense"
-                name="lastName"
+                name="prenom"
                 onChange={handleChange}
                 required
                 value={user ? user.prenom : ''}
@@ -109,7 +122,7 @@ const AccountDetails = props => {
                 fullWidth
                 label="Email Address"
                 margin="dense"
-                name="email"
+                name="mail"
                 onChange={handleChange}
                 required
                 value={user ? user.mail : ''}
@@ -125,7 +138,7 @@ const AccountDetails = props => {
                 fullWidth
                 label="Phone Number"
                 margin="dense"
-                name="phone"
+                name="tel"
                 onChange={handleChange}
                 type="number"
                 value={user ? user.tel : ''}
@@ -183,8 +196,10 @@ const AccountDetails = props => {
           <Button
             color="primary"
             variant="contained"
+            onClick = {handleSubmit}
           >
             Save details
+            
           </Button>
         </CardActions>
       </form>
