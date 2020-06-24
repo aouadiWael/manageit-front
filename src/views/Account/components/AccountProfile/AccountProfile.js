@@ -43,7 +43,7 @@ const AccountProfile = props => {
 
   useEffect(() => {
     async function fetchUser() {
-      const res = await fetch(`http://localhost:8081/employes/3`);
+      const res = await fetch(`http://localhost:8081/employes/1`);
       const data = await res.json();
       setUser(data);
       console.log("USER" , user)

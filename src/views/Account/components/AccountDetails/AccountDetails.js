@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
+import countryList from 'react-select-country-list';
 import {
   Card,
   CardHeader,
@@ -25,7 +26,7 @@ const AccountDetails = props => {
 
   useEffect(() => {
     async function fetchUser() {
-      const res = await fetch(`http://localhost:8081/employes/3`);
+      const res = await fetch(`http://localhost:8081/employes/1`);
       const data = await res.json();
       setUser(data);
     }
@@ -51,14 +52,8 @@ const AccountDetails = props => {
       [event.target.name]: event.target.value
     });
   };
-
-  const states = [
-    {
-      value: 'paris',
-      label: 'Paris'
-    }
-  ];
-
+   
+  const nationalities = require('npm-nationality-list');
   
   return (
     
@@ -152,18 +147,95 @@ const AccountDetails = props => {
             >
               <TextField
                 fullWidth
-                label="Select State"
+                label="Street Number"
                 margin="dense"
-                name="state"
+                name="numRue"
+                onChange={handleChange}
+                type="number"
+                value={user ? user.numRue : ''}
+                variant="outlined"
+              />
+            </Grid>
+            <Grid
+              item
+              md={6}
+              xs={12}
+            >
+              <TextField
+                fullWidth
+                label="Street Name"
+                margin="dense"
+                name="rue"
+                onChange={handleChange}
+                value={user ? user.rue : ''}
+                variant="outlined"
+              />
+            </Grid>
+            <Grid
+              item
+              md={6}
+              xs={12}
+            >
+              <TextField
+                fullWidth
+                label="Postal Code"
+                margin="dense"
+                name="codePostal"
+                onChange={handleChange}
+                value={user ? user.codePostal : ''}
+                type="number"
+                variant="outlined"
+              />
+            </Grid>
+            <Grid
+              item
+              md={6}
+              xs={12}
+            >
+              <TextField
+                fullWidth
+                label="Additional Address"
+                margin="dense"
+                name="complementAdresse"
+                onChange={handleChange}
+                value={user ? user.complementAdresse : ''}
+                variant="outlined"
+              />
+            </Grid>
+            <Grid
+              item
+              md={6}
+              xs={12}
+            >
+              <TextField
+                fullWidth
+                label="State"
+                margin="dense"
+                name="ville"
+                onChange={handleChange}
+                value={user ? user.ville : ''}
+                variant="outlined"
+              />
+            </Grid>
+            <Grid
+              item
+              md={6}
+              xs={12}
+            >
+              <TextField
+                fullWidth
+                label="Country"
+                margin="dense"
+                name="pays"
                 onChange={handleChange}
                 required
                 select
                 // eslint-disable-next-line react/jsx-sort-props
                 SelectProps={{ native: true }}
-                value={'Paris'}
+                value={user ? user.pays : ''}
                 variant="outlined"
               >
-                {states.map(option => (
+                {countryList().getData().map(option => (
                   <option
                     key={option.value}
                     value={option.value}
@@ -180,14 +252,26 @@ const AccountDetails = props => {
             >
               <TextField
                 fullWidth
-                label="Country"
+                label="Nationality"
                 margin="dense"
-                name="country"
+                name="nationalite"
                 onChange={handleChange}
                 required
-                value={'France'}
+                select
+                // eslint-disable-next-line react/jsx-sort-props
+                SelectProps={{ native: true }}
+                value={user ? user.nationalite : ''}
                 variant="outlined"
-              />
+              >
+                {nationalities.getList().map(option => (
+                  <option
+                    key={option.num_code}
+                    value={option.num_code}
+                  >
+                    {option.nationality}
+                  </option>
+                ))}
+              </TextField>
             </Grid>
           </Grid>
         </CardContent>
