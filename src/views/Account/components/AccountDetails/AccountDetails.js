@@ -31,7 +31,17 @@ const AccountDetails = props => {
       setUser(data);
     }
     fetchUser();
-  }, []);
+  });
+
+  useEffect(() => {
+    if(user && localStorage.getItem('image') != null){
+    setUser({
+      ...user,
+      photoProfil : localStorage.getItem('image')
+    });
+  }
+  }, [user && user.photoProfil]);
+  
 
   const handleSubmit = () => {
     const requestOptions = {
@@ -41,7 +51,7 @@ const AccountDetails = props => {
   };
 
   let idToUpdate = JSON.parse(requestOptions.body).id;
-
+  
   fetch(`http://localhost:8081/employes/employe/${idToUpdate}`, requestOptions)
       .then(response => response.json())
   };
@@ -49,7 +59,7 @@ const AccountDetails = props => {
   const handleChange = event => {
     setUser({
       ...user,
-      [event.target.name]: event.target.value
+      [event.target.name]: event.target.value,
     });
   };
    

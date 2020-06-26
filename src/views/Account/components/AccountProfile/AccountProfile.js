@@ -39,17 +39,40 @@ const AccountProfile = props => {
 
   const classes = useStyles();
 
-  const [user, setUser] = useState([]);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     async function fetchUser() {
       const res = await fetch(`http://localhost:8081/employes/1`);
       const data = await res.json();
       setUser(data);
-      console.log("USER" , user)
     }
     fetchUser();
   }, []);
+
+  const handleChange = event => {
+    const fileList  = event.target.files;
+    
+    var fileReader = new FileReader();
+    if (fileReader && fileList && fileList.length) {
+       fileReader.readAsDataURL(fileList[0]);
+       console.log("URL : ", fileList);
+       fileReader.onload = function () {
+          var imageData = fileReader.result;
+          setUser({
+            ...user,
+            photoProfil: imageData
+          });
+          localStorage.setItem('image', imageData.split(',')[1]);
+       };
+    }
+  };
+
+
+    const handleClick = () => {
+      document.getElementById('hiddenFileInput').click();
+    };
+
 
   return (
     <Card
@@ -63,21 +86,21 @@ const AccountProfile = props => {
               gutterBottom
               variant="h2"
             >
-              {user.prenom} {user.nom}
+              {user ? user.prenom : ""} {user ? user.nom :""}
             </Typography>
             <Typography
               className={classes.locationText}
               color="textSecondary"
               variant="body1"
             >
-              {user.mail}
+              {user ? user.mail : ''}
             </Typography>
             <Typography
               className={classes.locationText}
               color="textSecondary"
               variant="body1"
             >
-              {user.role ? user.role.label : ''}
+              {user ? user.role.label : ''}
             </Typography>
           
             <Typography
@@ -91,7 +114,8 @@ const AccountProfile = props => {
           </div>
           <Avatar
             className={classes.avatar}
-            src = '/images/avatars/aouadi.jpg'
+            src = {user && user.photoProfil  ? user.photoProfil.indexOf("data:image") == -1 ?
+              `data:image/jpeg;base64,${user.photoProfil}` : `${user.photoProfil}` : ""}
           />
         </div>
         <div className={classes.progress}>
@@ -104,10 +128,17 @@ const AccountProfile = props => {
       </CardContent>
       <Divider />
       <CardActions>
+      <input
+        type="file"
+        id="hiddenFileInput"
+        onChange={handleChange}
+        style={{display: 'none'}}
+      />
         <Button
           className={classes.uploadButton}
           color="primary"
           variant="text"
+          onClick = {handleClick}
         >
           Upload picture
         </Button>
