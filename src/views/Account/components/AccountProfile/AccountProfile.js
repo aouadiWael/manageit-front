@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, {useContext } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import moment from 'moment';
 import { makeStyles } from '@material-ui/styles';
+import {AppContext} from '../../../../AppContext';
 import {
   Card,
   CardActions,
@@ -38,32 +39,33 @@ const AccountProfile = props => {
   const { className, ...rest } = props;
 
   const classes = useStyles();
+  const { user,setUser } = useContext(AppContext);
 
-  const [user, setUser] = useState(null);
+  console.log("USER LOADED ACCOUNT PROFILE: ", user);
 
-  useEffect(() => {
+  //const [user, setUser] = useState(null);
+
+  /*useEffect(() => {
     async function fetchUser() {
       const res = await fetch(`http://localhost:8081/employes/1`);
       const data = await res.json();
       setUser(data);
     }
     fetchUser();
-  }, []);
+  }, []);*/
 
-  const handleChange = event => {
+  const handleChange = (event) => {
     const fileList  = event.target.files;
     
     var fileReader = new FileReader();
     if (fileReader && fileList && fileList.length) {
        fileReader.readAsDataURL(fileList[0]);
-       console.log("URL : ", fileList);
        fileReader.onload = function () {
           var imageData = fileReader.result;
           setUser({
             ...user,
-            photoProfil: imageData
+            photoProfil: imageData.split(',')[1]
           });
-          localStorage.setItem('image', imageData.split(',')[1]);
        };
     }
   };
@@ -100,7 +102,7 @@ const AccountProfile = props => {
               color="textSecondary"
               variant="body1"
             >
-              {user ? user.role.label : ''}
+              {user && user.role ? user.role.label : ''}
             </Typography>
           
             <Typography
@@ -114,7 +116,7 @@ const AccountProfile = props => {
           </div>
           <Avatar
             className={classes.avatar}
-            src = {user && user.photoProfil  ? user.photoProfil.indexOf("data:image") == -1 ?
+            src = {user && user.photoProfil ? user.photoProfil.indexOf("data:image") === -1 ?
               `data:image/jpeg;base64,${user.photoProfil}` : `${user.photoProfil}` : ""}
           />
         </div>

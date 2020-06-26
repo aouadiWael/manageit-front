@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useContext} from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
 import countryList from 'react-select-country-list';
+import {AppContext} from '../../../../AppContext';
 import {
   Card,
   CardHeader,
@@ -22,26 +23,8 @@ const AccountDetails = props => {
 
   const { className, ...rest } = props;
   const classes = useStyles();
-  const [user, setUser] = useState(null);
-
-  useEffect(() => {
-    async function fetchUser() {
-      const res = await fetch(`http://localhost:8081/employes/1`);
-      const data = await res.json();
-      setUser(data);
-    }
-    fetchUser();
-  });
-
-  useEffect(() => {
-    if(user && localStorage.getItem('image') != null){
-    setUser({
-      ...user,
-      photoProfil : localStorage.getItem('image')
-    });
-  }
-  }, [user && user.photoProfil]);
-  
+  const { user,setUser } = useContext(AppContext);
+  console.log("USER LOADED ACCOUNT DETAILS: ", user);
 
   const handleSubmit = () => {
     const requestOptions = {

@@ -1,9 +1,10 @@
-import React, {useEffect, useState} from 'react';
+import React , {useContext} from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
 import { Avatar, Typography } from '@material-ui/core';
+import {AppContext} from './../../../../../../AppContext';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -26,16 +27,7 @@ const Profile = props => {
 
   const classes = useStyles();
 
-  const [user, setUser] = useState([]);
-
-  useEffect(() => {
-    async function fetchUser() {
-      const res = await fetch(`http://localhost:8081/employes/1`);
-      const data = await res.json();
-      setUser(data);
-    }
-    fetchUser();
-  }, []);
+  const { user } = useContext(AppContext);
 
 
   return (
@@ -47,7 +39,7 @@ const Profile = props => {
         alt="Person"
         className={classes.avatar}
         component={RouterLink}
-        src = {user.photoProfil  ? user.photoProfil.indexOf("data:image") == -1 ?
+        src = {user.photoProfil  ? user.photoProfil.indexOf("data:image") === -1 ?
               `data:image/jpeg;base64,${user.photoProfil}` : `${user.photoProfil}` : ""}
         to="/settings"
       />

@@ -11,6 +11,7 @@ import 'react-perfect-scrollbar/dist/css/styles.css';
 import './assets/scss/index.scss';
 import validators from './common/validators';
 import Routes from './Routes';
+import { AppProvider } from "./AppContext";
 
 const browserHistory = createBrowserHistory();
 
@@ -25,11 +26,13 @@ validate.validators = {
 
 const App = () => {
   return (
-    <ThemeProvider theme={theme}>
+    <AppProvider>
+      <ThemeProvider theme={theme}>
         <Router history={browserHistory}>
           <Routes />
         </Router>
       </ThemeProvider>
+    </AppProvider>
   );
 };
 
