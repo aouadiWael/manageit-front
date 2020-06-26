@@ -76,7 +76,7 @@ const AccountDetails = props => {
               <TextField
                 fullWidth
                 helperText="Please specify the first name"
-                label="First name"
+                label="Last name"
                 margin="dense"
                 name="nom"
                 onChange={handleChange}
@@ -92,7 +92,7 @@ const AccountDetails = props => {
             >
               <TextField
                 fullWidth
-                label="Last name"
+                label="First name"
                 margin="dense"
                 name="prenom"
                 onChange={handleChange}
