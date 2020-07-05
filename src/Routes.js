@@ -8,6 +8,7 @@ import {
   Dashboard as DashboardView,
   SignIn as SignInView,
   Account as AccountView,
+  UserList as UserListView
 } from './views';
 
 const Routes = () => {
@@ -36,6 +37,12 @@ const Routes = () => {
         exact
         layout={MainLayout}
         path="/dashboard"
+      />
+       <RouteWithLayout
+        component={UserListView}
+        exact
+        layout={MainLayout}
+        path="/users"
       />
       <Redirect to="/not-found" />
     </Switch>
